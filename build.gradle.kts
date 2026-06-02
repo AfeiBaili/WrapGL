@@ -3,7 +3,7 @@ plugins {
     `maven-publish`
 }
 
-group = "com.github.afeibaili"
+group = "cn.afeibaili.gl"
 version = properties["version"] as String
 val mavenPackageName = "wrapgl"
 
@@ -18,11 +18,13 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
 
-    implementation(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
+    api(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
+    api("org.lwjgl", "lwjgl-glfw")
+    api("org.joml", "joml", jomlVersion)
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
     implementation("org.lwjgl", "lwjgl")
     implementation("org.lwjgl", "lwjgl-freetype")
-    api("org.lwjgl", "lwjgl-glfw")
     implementation("org.lwjgl", "lwjgl-openal")
     implementation("org.lwjgl", "lwjgl-opengl")
     implementation("org.lwjgl", "lwjgl-stb")
@@ -32,12 +34,14 @@ dependencies {
     implementation("org.lwjgl", "lwjgl-openal", classifier = lwjglNatives)
     implementation("org.lwjgl", "lwjgl-opengl", classifier = lwjglNatives)
     implementation("org.lwjgl", "lwjgl-stb", classifier = lwjglNatives)
-    api("org.joml", "joml", jomlVersion)
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 }
 
 tasks.test {
     useJUnitPlatform()
+}
+
+java {
+    withSourcesJar()
 }
 
 publishing {
