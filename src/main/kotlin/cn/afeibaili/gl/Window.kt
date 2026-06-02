@@ -15,12 +15,20 @@ class Window(
     var width: Int,
     var height: Int,
     var title: String,
-    private val windowLocation: Long,
+    val windowLocation: Long,
 ) : Closeable {
 
     override fun close() {
         glfwDestroyWindow(windowLocation)
         glfwTerminate()
+    }
+
+    inline fun frameRender(action: () -> Unit) {
+        while (!glfwWindowShouldClose(windowLocation)) {
+            action()
+            glfwSwapBuffers(windowLocation)
+            glfwPollEvents()
+        }
     }
 
     companion object {
