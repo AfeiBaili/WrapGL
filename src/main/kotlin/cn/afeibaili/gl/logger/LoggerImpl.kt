@@ -3,6 +3,7 @@ package cn.afeibaili.gl.logger
 import cn.afeibaili.gl.logger.Logger.Companion.printDebug
 import cn.afeibaili.gl.logger.Logger.Companion.writeFile
 import kotlinx.coroutines.*
+import java.io.File
 import java.io.FileWriter
 import java.io.PrintWriter
 import java.time.LocalDateTime
@@ -50,7 +51,9 @@ internal class LoggerImpl(override val name: String) : Logger {
         val outPrinter = PrintWriter(System.out, true)
         val errPrinter = PrintWriter(System.err, true)
         val filePrinter =
-            PrintWriter(FileWriter("${System.getProperty("user.dir")}/log/${getDate(fileNameFormatter)}.txt"), true)
+            PrintWriter(FileWriter(File("${System.getProperty("user.dir")}/log/${getDate(fileNameFormatter)}.txt").also {
+                it.parentFile.mkdirs()
+            }), true)
 
         private fun getDate(formatter: DateTimeFormatter) = LocalDateTime.now().format(formatter)
 
