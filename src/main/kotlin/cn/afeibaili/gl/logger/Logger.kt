@@ -15,4 +15,9 @@ interface Logger {
     fun warn(msg: Any)
     fun error(msg: Any)
     fun debug(msg: Any)
+
+    companion object {
+        var printDebug = true
+        var writeFile = true
+    }
 }
