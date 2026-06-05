@@ -21,13 +21,23 @@ class TextureAtlas(val atlas: List<Atlas>) {
 
     fun getUv(id: String, outUv: FloatArray) {
         if (outUv.size != 4) throw ArrayException("UV数组大小不为4")
-        val atlas: Atlas? = getAtlas(id)
-        if (atlas == null) throw ImageException("图集为空，id不正确")
+        val atlas: Atlas = getAtlas(id) ?: throw ImageException("图集为空，id不正确")
         val (x, y) = atlas.nameMap[id]!!
-        outUv[0] = x.toFloat() / atlas.atlasSide.value                            // U
-        outUv[1] = y.toFloat() / atlas.atlasSide.value                            // V
-        outUv[2] = (x.toFloat() + atlas.imageSide.value) / atlas.atlasSide.value  // U1
-        outUv[3] = (y.toFloat() + atlas.imageSide.value) / atlas.atlasSide.value  // V1
+
+//        outUv[0] = x.toFloat() / atlas.atlasSide.value                            // U
+//        outUv[1] = y.toFloat() / atlas.atlasSide.value                            // V
+//        outUv[2] = (x.toFloat() + atlas.imageSide.value) / atlas.atlasSide.value  // U1
+//        outUv[3] = (y.toFloat() + atlas.imageSide.value) / atlas.atlasSide.value  // V1
+
+        val atlasSideF = atlas.atlasSide.value.toFloat()
+        val imageSideF = atlas.imageSide.value.toFloat()
+
+        outUv[0] = x.toFloat() / atlasSideF                                       // U (左)
+        outUv[2] = (x.toFloat() + imageSideF) / atlasSideF                        // U1 (右)
+
+        // 🛠️ 核心修正：将 V 轴从左上角坐标系转换为 OpenGL 的左下角坐标系
+        outUv[1] = (atlasSideF - (y.toFloat() + imageSideF)) / atlasSideF         // V (底)
+        outUv[3] = (atlasSideF - y.toFloat()) / atlasSideF
     }
 
     fun getAtlas(id: String): Atlas? = atlas.find { it.nameMap[id] != null }
