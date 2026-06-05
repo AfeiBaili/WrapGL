@@ -25,8 +25,8 @@ class Texture(val bufferedImage: BufferedImage) : Closeable {
 
     fun upload() {
         glTextureStorage2D(textureLocation, 1, GL_RGBA8, bufferedImage.width, bufferedImage.height)
-        glTextureParameteri(textureLocation, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-        glTextureParameteri(textureLocation, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+        glTextureParameteri(textureLocation, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+        glTextureParameteri(textureLocation, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
 
         val pixels = IntArray(width * height)
         bufferedImage.getRGB(0, 0, width, height, pixels, 0, width)
