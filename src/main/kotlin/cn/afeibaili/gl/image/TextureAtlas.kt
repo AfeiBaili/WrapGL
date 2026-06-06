@@ -27,10 +27,12 @@ class TextureAtlas(val atlas: List<Atlas>) {
         val atlasSideF = atlas.atlasSide.value.toFloat()
         val imageSideF = atlas.imageSide.value.toFloat()
 
-        outUv[0] = x.toFloat() / atlasSideF
-        outUv[1] = (atlasSideF - (y.toFloat() + imageSideF)) / atlasSideF
-        outUv[2] = (x.toFloat() + imageSideF) / atlasSideF
-        outUv[3] = (atlasSideF - y.toFloat()) / atlasSideF
+        val texelClamp = 0.5f
+
+        outUv[0] = (x.toFloat() + texelClamp) / atlasSideF
+        outUv[1] = (atlasSideF - (y.toFloat() + imageSideF + texelClamp)) / atlasSideF
+        outUv[2] = (x.toFloat() + imageSideF - texelClamp) / atlasSideF
+        outUv[3] = (atlasSideF - y.toFloat() - texelClamp) / atlasSideF
     }
 
     fun getAtlas(id: String): Atlas? = atlas.find { it.nameMap[id] != null }
