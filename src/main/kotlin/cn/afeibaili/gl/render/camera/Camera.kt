@@ -30,6 +30,11 @@ class Camera(val projectionName: String, val viewName: String) {
         return this
     }
 
+    fun ortho(left: Float, right: Float, bottom: Float, top: Float, near: Float, far: Float): Camera {
+        projection.ortho(left, right, bottom, top, near, far)
+        return this
+    }
+
     fun apply(program: Program) {
         uploadUniform(program, projectionName, viewName)
     }
