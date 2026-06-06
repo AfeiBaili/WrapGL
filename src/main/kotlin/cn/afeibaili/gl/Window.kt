@@ -2,6 +2,8 @@ package cn.afeibaili.gl
 
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.opengl.GL
+import org.lwjgl.opengl.GL11C.GL_SRC_ALPHA
+import org.lwjgl.opengl.GL45
 import org.lwjgl.opengl.GL45C
 import java.io.Closeable
 
@@ -60,8 +62,10 @@ class WindowBuilder() {
         val window: Long = glfwCreateWindow(width, height, title, 0, 0)
         glfwMakeContextCurrent(window)
         GL.createCapabilities()
-
         glfwSwapInterval(if (verticalSync) 1 else 0)
+
+        GL45C.glEnable(GL45.GL_BLEND)
+        GL45C.glBlendFunc(GL45.GL_SRC_ALPHA, GL45.GL_ONE_MINUS_SRC_ALPHA)
 
         blocks.forEach { it() }
 
