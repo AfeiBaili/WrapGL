@@ -22,9 +22,8 @@ class Window(
     val clearColor: FloatArray,
 ) : Closeable {
 
-    override fun close() {
-        glfwDestroyWindow(windowLocation)
-        glfwTerminate()
+    fun setViewport(width: Int, height: Int) {
+        GL45C.glViewport(0, 0, width, height)
     }
 
     inline fun frameRender(action: () -> Unit) {
@@ -34,6 +33,11 @@ class Window(
             glfwSwapBuffers(windowLocation)
             glfwPollEvents()
         }
+    }
+
+    override fun close() {
+        glfwDestroyWindow(windowLocation)
+        glfwTerminate()
     }
 
     companion object {
